@@ -10,7 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Movie {
 
 	@Id
@@ -39,8 +42,8 @@ public class Movie {
 	@ElementCollection
 	@CollectionTable(name = "movie_cast")
 	private Set<String> movieCast;
-	@Column(nullable = false)
-	@NotBlank(message = "Please provide movie's release year")
+	
+	@NotNull(message = "Please provide movie's release year")
 	private Integer releaseYear;
 
 	@Column(nullable = false)
