@@ -9,9 +9,13 @@ import com.movieflix.dto.MovieDto;
 
 public interface MovieService {
 
-	MovieDto addMovie(MovieDto movieDto,MultipartFile file) throws IOException;
-	
+	MovieDto addMovie(MovieDto movieDto, MultipartFile file) throws IOException;
+
 	MovieDto getMovie(Integer movieId);
-	
+
 	List<MovieDto> getAllMovies();
+
+	MovieDto updateMovie(Integer movieId, MovieDto movieDto, MultipartFile file) throws IOException;
+
+	String deleteMovie(Integer id) throws IOException;
 }
