@@ -40,8 +40,8 @@ public class User implements UserDetails {
 	private String name;
 
 	@NotBlank(message = "The username field cannot be blank")
-	@Column(unique = true)
-	private String username;
+	@Column(unique = true, name = "username")
+	private String actualUsername;
 
 	@NotBlank(message = "The email field cannot be empty")
 	@Column(unique = true)
@@ -90,5 +90,5 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return password;
 	}
-	
+
 }

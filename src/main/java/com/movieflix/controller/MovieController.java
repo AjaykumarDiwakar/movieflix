@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.movieflix.auth.service.JwtService;
 import com.movieflix.dto.MovieDto;
 import com.movieflix.service.MovieService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import tools.jackson.databind.ObjectMapper;
 
 @RestController
@@ -27,6 +29,9 @@ public class MovieController {
 
 	@Autowired
 	private MovieService movieService;
+
+	@Autowired
+	private JwtService jwtService;
 
 	@PostMapping("/add-movie")
 	public ResponseEntity<MovieDto> addMovieHandler(@RequestPart MultipartFile file, @RequestPart String movieDto)
@@ -48,16 +53,22 @@ public class MovieController {
 	public ResponseEntity<List<MovieDto>> getAllMoviesHandler() {
 		return ResponseEntity.ok(movieService.getAllMovies());
 	}
-	
+
 	@PutMapping("/update/{movieId}")
-	public ResponseEntity<MovieDto> updateMovieHandler(@PathVariable Integer movieId,@RequestPart MultipartFile file,@RequestPart String movieDtoObj) throws IOException{
-		if(file.isEmpty()) file=null;
-		MovieDto movieDto=convertToMovieDto(movieDtoObj);
+	public ResponseEntity<MovieDto> updateMovieHandler(@PathVariable Integer movieId, @RequestPart MultipartFile file,
+			@RequestPart String movieDtoObj) throws IOException {
+		if (file.isEmpty())
+			file = null;
+		MovieDto movieDto = convertToMovieDto(movieDtoObj);
 		return ResponseEntity.ok(movieService.updateMovie(movieId, movieDto, file));
 	}
-	
+
 	@DeleteMapping("/delete/{movieId}")
-	public ResponseEntity<String> deleteMovieHandler(@PathVariable Integer movieId) throws IOException{
+	public ResponseEntity<String> deleteMovieHandler(@PathVariable Integer movieId, HttpServletRequest request)
+			throws IOException {
+		String authHeader = jwtService.extractActualTokenFromBearerAuth(request.getHeader("Authorization"));
+		System.out.println(authHeader);
+		System.out.println(jwtService.extractUsername(authHeader));
 		return ResponseEntity.ok(movieService.deleteMovie(movieId));
 	}
 }
